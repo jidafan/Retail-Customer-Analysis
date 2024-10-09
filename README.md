@@ -57,3 +57,6 @@ Following the investigation we find that,
 | `AMAZONFEE`     | Amazon shipping fee | Exclude |
 | `ADJUSTX`     | Manual adjustments by Admin | Exclude |
 
+We find that only the unique case of 'PADS' is a valid code to include in our analysis.
+
+#### Data Cleaning
