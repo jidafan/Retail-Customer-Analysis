@@ -263,3 +263,33 @@ Action: Implement loyalty programs or bundle deals to encourage higher spending 
 Rationale: This cluster represents customers who spend heavily and make frequent purchases. They are likely top-tier customers who require special attention.
 
 Action: Develop VIP programs or exclusive offers to maintain their loyalty and encourage continued engagement
+
+#### 2.5 Visualization
+
+In our final step, first we combine all of the information we have analyzed. Combining the non-outliers and the outlier dataframes and applying the appropriate clusters to them
+
+```
+cluster_labels = {
+    0: "RETAIN",
+    1: "RE-ENGAGE",
+    2: "NURTURE",
+    3: "REWARD",
+    -1: "PAMPER",
+    -2: "UPSELL",
+    -3: "DELIGHT"
+}
+
+full_clustering_df = pd.concat([non_outliers_df, outlier_clusters_df])
+
+full_clustering_df["ClusterLabel"] = full_clustering_df["Cluster"].map(cluster_labels)
+```
+
+![image](https://github.com/user-attachments/assets/51f64292-d720-4809-9b50-8fbe563a5811)
+
+Lastly, we visualize the information to summarize our findings
+
+![image](https://github.com/user-attachments/assets/6a118ed1-4280-46b0-9efa-f54100c710fb)
+
+From the graph, we can see that the biggest group of customers fall under the Nurture cluster, which means we should focus on targeted-marketing compaigns, special discounts, or reminders to encourage customers to return and purchase products
+
+### 3. Conclusion
