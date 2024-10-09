@@ -6,9 +6,10 @@
   * [2.2 Data Cleaning](#22-data-cleaning)
   * [2.3 Feature Engineering](#23-feature-engineering)
   * [2.4 KMeans Clustering](#24-kmeans-clustering)
-    + [1.4.1 Internal References](#141-internal-references)
-    + [1.4.2 External References](#142-external-references)
-  * [1.5 Overview](#15-overview)
+    + [2.4.1 Cluster Analysis](#241-cluster-analysis)
+    + [2.4.2 Outlier Analysis](#242-outlier-analysis)
+  * [2.5 Visualization](#25-visualization)
+- [3. Conclusion](#3-conclusion)
 
 ### 1. Introduction
 
@@ -157,3 +158,108 @@ scaled_data_df
 ```
 
 #### 2.4 KMeans Clustering
+
+We select an upper limit of 12 for how many clusters we should have, and we use the graphs to determine which is an appropriate amount of clusters. The silohuette score shows how distinct a cluster is, a higher score indicating more distinct clusters. Silohuette can range from [-1, 1]. -1 means that the data is all over lapping, and 1 means that there is no overlap in the data.
+
+![image](https://github.com/user-attachments/assets/8c8e6d54-2743-4081-8ee1-e69bb014bfc6)
+
+From the charts, we can see that around 4 - 5 is an appropriate amount of clusters to have. As, there is not much improvement by adding more, and it keeps it simple by not having to maintain a large amount of data frames.
+
+We then apply the clusters to our non outliers data frame.
+
+```
+kmeans = KMeans(n_clusters=4, random_state=42, max_iter=1000)
+cluster_labels = kmeans.fit_predict(scaled_data_df)
+
+non_outliers_df["Cluster"] = cluster_labels
+non_outliers_df
+```
+
+![image](https://github.com/user-attachments/assets/f3923c67-8445-4480-b128-13a74bf81d77)
+
+We then visualize the clusters using a scatterplot to see the spread of the data.
+
+![image](https://github.com/user-attachments/assets/4dead60d-6ab7-40fc-bde0-6a11c2f89ebf)
+
+After we look at violin plots of the different clusters to examine, the correct course of action for each group.
+
+![image](https://github.com/user-attachments/assets/b71031c4-823e-40ec-ac58-17f3561c18a0)
+
+![image](https://github.com/user-attachments/assets/d0f71ccf-fa7b-4dc5-b490-8471aaa35855)
+
+![image](https://github.com/user-attachments/assets/47b18f6b-40c1-481c-8c7c-a3e931182135)
+
+#### 2.4.1 Cluster Analysis
+
+1. Cluster 0 (Blue): "Retain"
+
+Rationale: This cluster represents high value customers who purchase products regularly, however, not always recently. The focus should be on retention efforts to maintain loyalty and spending habits
+
+Action: Implement loyalty programs, personalized offers and regular engagement to ensure active spending
+
+2. Cluster 1 (Orange): "Re-engage"
+
+Rationale: This group represents lower-value and infrequent buyers who haven't purchased products recently. The focus should be on re-engagement to bring them into active purchasing behaviour
+
+Action: Use targeted-marketing compaigns, special discounts, or reminders to encourage them to return and purchase products
+
+3. Cluster 2 (Green): "Nurture"
+
+Rationale: This group represents the least active and lowest-value customers, but they have made recent purchases. These customers may be new or need nurturing to increase engagement and spending
+
+Action: Focus on building relationships, providing excellent customer service, and offering incentives to encourage frequent purchases
+
+4. Cluster 3 (Red): "Reward"
+
+Rationale: This cluster includes high-value and frequent customers, many of whom are still purchasing. They are the most loyal customers, and rewarding their loyalty is key to maintaining engagement
+
+Action: Implement a robust loyalty program, provide exclusive offers and recognize their loyalty to keep them engaged and satisfied
+
+#### 2.4.2 Outlier Analysis
+
+For our next step, we will analyze the information from the outliers that we excluded from the analysis in a prior step. As this information can still be valuable to us and help with our customer analysis
+
+To do so, we create data frames that hold only the monetary outliers, the frequency outliers, and a data frame that holds common ones shared between them. After, we combine everything into one outlier data frame
+
+```
+overlap_indices = monetary_outliers_df.index.intersection(frequency_outliers_df.index)
+
+monetary_only_outliers = monetary_outliers_df.drop(overlap_indices)
+frequency_only_outliers = frequency_outliers_df.drop(overlap_indices)
+
+monetary_and_frequency_outliers = monetary_outliers_df.loc[overlap_indices]
+
+monetary_only_outliers["Cluster"] = -1
+frequency_only_outliers["Cluster"] = -2
+monetary_and_frequency_outliers["Cluster"] = -3
+
+outlier_clusters_df = pd.concat([monetary_only_outliers, frequency_only_outliers, monetary_and_frequency_outliers])
+```
+
+We denote a cluster to each grouping of outliers.
+
+Next, we visualize the data using violin plots as we did previously to determine the actions we need to take
+
+![image](https://github.com/user-attachments/assets/20704b26-26f9-435d-a142-6e2792a1703e)
+
+![image](https://github.com/user-attachments/assets/5815d9c1-dc42-4c45-a299-9f8353eebac4)
+
+![image](https://github.com/user-attachments/assets/28f4404f-4a5f-47f6-9b55-1bfb8e2b1073)
+
+1. Cluster -1 (Monetary Outliers): "Pamper"
+
+Rationale: This cluster represents high spenders but not frequent buyers, their purchases are large but infrequent. 
+
+Action: Focus on maintaining their loyalty with personalized offers or luxury services that cater to their high spending capacity
+
+2. Cluster -2 (Frequency Outliers): "Upsell"
+
+Rationale: This cluster represents frequent buyers who spend less per purchase, these customers are engaged but may benefit from upselling opportunities
+
+Action: Implement loyalty programs or bundle deals to encourage higher spending per visit, given their frequent engagement
+
+3. Cluster -3 (Monetary & Frequency Outliers): "Delight"
+
+Rationale: This cluster represents customers who spend heavily and make frequent purchases. They are likely top-tier customers who require special attention.
+
+Action: Develop VIP programs or exclusive offers to maintain their loyalty and encourage continued engagement
