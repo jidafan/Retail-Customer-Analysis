@@ -60,3 +60,17 @@ Following the investigation we find that,
 We find that only the unique case of 'PADS' is a valid code to include in our analysis.
 
 #### Data Cleaning
+
+The first step of our data cleaning process is to only include valid invoices, which are 6 digit numbers. To do this we create a mask function which will only capture valid InvoiceNos.
+
+![image](https://github.com/user-attachments/assets/5d931c8e-de6c-40b2-9f68-177509c4ef21)
+
+Next, we look at valid stock codes, which we determined is any 5 digit number, 5 digit numbers that have a letter after, and PADS.
+
+![image](https://github.com/user-attachments/assets/bc49dcde-6af0-448f-b50f-bdf4504098f3)
+
+After, this we remove any customer IDS that are null and any prices that are <= 0.
+
+Following this processes, we find that after cleaning the dataset, we have retained 77% of the data, losing 23% of the data in the process.
+
+
