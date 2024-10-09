@@ -73,4 +73,6 @@ After, this we remove any customer IDS that are null and any prices that are <= 
 
 Following this processes, we find that after cleaning the dataset, we have retained 77% of the data, losing 23% of the data in the process.
 
+#### Feature Engineering
+
 
