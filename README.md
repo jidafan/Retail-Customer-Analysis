@@ -71,8 +71,72 @@ Next, we look at valid stock codes, which we determined is any 5 digit number, 5
 
 After, this we remove any customer IDS that are null and any prices that are <= 0.
 
-Following this processes, we find that after cleaning the dataset, we have retained 77% of the data, losing 23% of the data in the process.
+Following this processes, we find that after cleaning the dataset. We have retained 77% of the data, losing 23% of the data in the process.
 
 #### Feature Engineering
 
+The first step in this process is creating a new Dataframe with only information that we need for our cluster analysis.
+
+```
+cleaned_df["SalesLineTotal"] = cleaned_df["Quantity"] * cleaned_df["Price"]
+
+aggregated_df = cleaned_df.groupby(by="Customer ID", as_index=False) \
+    .agg(
+        MonetaryValue=("SalesLineTotal", "sum"),
+        Frequency=("Invoice", "nunique"),
+        LastInvoiceDate=("InvoiceDate", "max")
+    )
+
+max_invoice_date = aggregated_df["LastInvoiceDate"].max()
+max_invoice_date
+
+aggregated_df["Recency"] = (max_invoice_date - aggregated_df["LastInvoiceDate"]).dt.days
+```
+
+![image](https://github.com/user-attachments/assets/8c5df388-1711-472b-9e6d-41d59ed16238)
+
+This dataframe contains only the columns needed for analysis. 
+
+| Variable      | Description   | 
+| ------------- |:---------------------| 
+| `Customer ID`     | A 5 digit identifier for customers   |
+| `MonetaryValue`     | The amount of money that a customer has spent in total |   
+| `Frequency` | How many purchases a customer has made                  |
+| `LastInvoiceDate`     | The date of the customer's most recent purchase |
+| `Recency` | How many days since the customer's last purchase                    |
+
+Afterwards, we create visualizations to see the data and if there are outliers.
+
+![image](https://github.com/user-attachments/assets/d20e77d8-c06d-4e54-8575-00be9ffddc98)
+
+![image](https://github.com/user-attachments/assets/eb9cac67-290d-42d4-abb9-2f795c3c7815)
+
+From the boxplots, we see that there are many outliers in our data. These outliers may possess important information, so we create a seperate data frame that has no outliers and two data frames to capture the Monetary Outliers and the Frequency Outliers
+
+Monetary Outliers
+```
+M_Q1 = aggregated_df["MonetaryValue"].quantile(0.25)
+M_Q3 = aggregated_df["MonetaryValue"].quantile(0.75)
+M_IQR = M_Q3 - M_Q1
+
+monetary_outliers_df = aggregated_df[(aggregated_df["MonetaryValue"] > (M_Q3 + 1.5* M_IQR)) | (aggregated_df["MonetaryValue"] < (M_Q1 - 1.5* M_IQR))].copy()
+```
+
+Frequency Outliers
+```
+F_Q1 = aggregated_df["Frequency"].quantile(0.25)
+F_Q3 = aggregated_df["Frequency"].quantile(0.75)
+
+F_IQR = F_Q3 - F_Q1
+
+frequency_outliers_df = aggregated_df[(aggregated_df["Frequency"] > (F_Q3 + 1.5* F_IQR)) | (aggregated_df["Frequency"] < (F_Q1 - 1.5* F_IQR))].copy()
+```
+
+Data frame with no outliers
+```
+non_outliers_df = aggregated_df[(~aggregated_df.index.isin(monetary_outliers_df.index)) & (~aggregated_df.index.isin(frequency_outliers_df.index))]
+```
+Afterwards, we visualize the data without any outliers to see the changes.
+
+![image](https://github.com/user-attachments/assets/d7dd225d-9498-4452-9427-48a3e6c258a6)
 
