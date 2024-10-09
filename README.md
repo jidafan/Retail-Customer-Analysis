@@ -71,15 +71,15 @@ Following the investigation we find that,
 | `DOT`     | Looks valid and represents the charges from postage | Exclude from clustering |
 | `M or m`     | Looks valid represents manual transactions | Exclude from clustering |
 | `C2`     | Carriage transaction | Exclude from clustering |
-| `C3`     | Only one value | Exclude |
+| `C3`     | Only one value | Exclude from clustering |
 | `Bank Charges or B`     | Bank charges | Exclude from clustering |
 | `S`     | Samples sent to customers | Exclude from clustering |
 | `TESTXXX`     | Testing data | Exclude from clustering |
-| `gift_XXX`     | Purchases from Gift Card, does not hold customer data | Exclude |
+| `gift_XXX`     | Purchases from Gift Card, does not hold customer data | Exclude from clustering |
 | `PADS`     | Stock Code for padding, unique case | Include |
-| `SP1002`     | 3 transactions for a special item, however, 1 has no pricing | Exclude |
-| `AMAZONFEE`     | Amazon shipping fee | Exclude |
-| `ADJUSTX`     | Manual adjustments by Admin | Exclude |
+| `SP1002`     | 3 transactions for a special item, however, 1 has no pricing | Exclude from clustering  |
+| `AMAZONFEE`     | Amazon shipping fee | Exclude from clustering  |
+| `ADJUSTX`     | Manual adjustments by Admin | Exclude from clustering  |
 
 We find that only the unique case of 'PADS' is a valid code to include in our analysis.
 
