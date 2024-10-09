@@ -221,7 +221,7 @@ We then visualize the clusters using a scatterplot to see the spread of the data
 
 ![image](https://github.com/user-attachments/assets/4dead60d-6ab7-40fc-bde0-6a11c2f89ebf)
 
-After we look at violin plots of the different clusters to examine, the correct course of action for each group.
+After we look at violin plots of the different clusters to examine the correct course of action for each group.
 
 ![image](https://github.com/user-attachments/assets/b71031c4-823e-40ec-ac58-17f3561c18a0)
 
