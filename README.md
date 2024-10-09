@@ -333,3 +333,7 @@ Lastly, we visualize the information to summarize our findings
 From the graph, we can see that the biggest group of customers fall under the Nurture cluster, which means we should focus on targeted-marketing compaigns, special discounts, or reminders to encourage customers to return and purchase products
 
 ### 3. Conclusion
+
+In this project, we looked at an online retail data transaction set that was recorded over two years. We performed exploratory data analysis to understand the data and see what information would be valuable and what should be excluded from the analysis. Next, we cleaned the data, by following the guidelines for what should be considered valid data and excluded what we believed would not aid the analysis. In the process, we lost 23% of the original data. Next, we did feature engineering where we created a new data frame that grouped together the purchases made by customers and created the variables that would be required for our analysis, "Monetary Value", "Frequency", and "Recency". After we performed KMeans clustering on both the non-ouliter and outlier data to determine the next steps for each group of customers. Lastly, we created a visual that summarizes the findings and displays the portion of customers in each cluster.
+
+Next Steps: Automate the process, so that when new information is added customers are automatically sorted into a grouping.
