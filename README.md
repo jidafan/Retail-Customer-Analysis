@@ -23,7 +23,18 @@ The code for the project can be viewed [here](https://github.com/jidafan/Retail-
 
 Before we begin working on the dataset, we must understand the data. In this step of the code, we create a data frame using Pandas to hold all the information from the Excel file. 
 
-![image](https://github.com/user-attachments/assets/f49d6abc-1558-4eba-a718-69f31a56cbd1)
+```
+df = pd.read_excel("online_retail_II.xlsx", sheet_name=0)
+df.head(10)
+```
+
+![image](https://github.com/user-attachments/assets/c36a8541-f138-4882-9825-31a6d704f785)
+
+```
+df.info()
+```
+
+![image](https://github.com/user-attachments/assets/55c5775c-a696-4c49-a4ac-236acd53ce59)
 
 After taking a look at the data. Next is exploring the columns and searching for invalid entries and missing data.
 
@@ -41,7 +52,13 @@ From analyzing the columns, we see that there a lot of entries that do meet the 
 
 However, in the StockCode column we find that there are many unique codes that do not follow the guidelines, so we must analyze each code and determine whether or not they should be included.
 
-![image](https://github.com/user-attachments/assets/f3d5778f-bf44-4451-b9d7-9adaa2559501)
+```
+df["StockCode"] = df["StockCode"].astype("str")
+df[(df["StockCode"].str.match("^\\d{5}$") == False) & (df["StockCode"].str.match("^\\d{5}[a-zA-Z]+$") == False)]["StockCode"].unique()
+```
+
+![image](https://github.com/user-attachments/assets/6ba5e5bb-5f56-4864-bcdd-d65650f14540)
+
 
 Following the investigation we find that,
 
@@ -70,11 +87,34 @@ We find that only the unique case of 'PADS' is a valid code to include in our an
 
 The first step of our data cleaning process is to only include valid invoices, which are 6 digit numbers. To do this we create a mask function which will only capture valid InvoiceNos.
 
-![image](https://github.com/user-attachments/assets/5d931c8e-de6c-40b2-9f68-177509c4ef21)
+```
+cleaned_df = df.copy()
+
+cleaned_df["Invoice"] = cleaned_df["Invoice"].astype("str")
+mask = (
+    cleaned_df["Invoice"].str.match("^\\d{6}$") == True
+)
+cleaned_df = cleaned_df[mask]
+cleaned_df
+```
+
+![image](https://github.com/user-attachments/assets/23f7bf61-160e-4ab5-8cee-24b8e3b33c53)
 
 Next, we look at valid stock codes, which we determined is any 5 digit number, 5 digit numbers that have a letter after, and PADS.
 
-![image](https://github.com/user-attachments/assets/bc49dcde-6af0-448f-b50f-bdf4504098f3)
+```
+cleaned_df["StockCode"] = cleaned_df["StockCode"].astype("str")
+mask = (
+    (cleaned_df["StockCode"].str.match("^\\d{5}$") == True)
+    | (cleaned_df["StockCode"].str.match("^\\d{5}[a-zA-Z]+$") == True)
+    | (cleaned_df["StockCode"].str.match("^PADS$") == True)                              
+)
+cleaned_df = cleaned_df[mask]
+cleaned_df
+```
+
+![image](https://github.com/user-attachments/assets/e190f2eb-b749-40fb-a7ab-ce766191c02f)
+
 
 After, this we remove any customer IDS that are null and any prices that are <= 0.
 
