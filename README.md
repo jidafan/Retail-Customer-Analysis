@@ -140,3 +140,14 @@ Afterwards, we visualize the data without any outliers to see the changes.
 
 ![image](https://github.com/user-attachments/assets/d7dd225d-9498-4452-9427-48a3e6c258a6)
 
+Next, we standardize the columns to ensure that they all have an equal impact during the analysis. We use the StandardScalar method from scikit-learn to accomplish this
+
+```
+scalar = StandardScaler()
+scaled_data = scalar.fit_transform(non_outliers_df[["MonetaryValue", "Frequency", "Recency"]])
+
+scaled_data_df = pd.DataFrame(scaled_data, index=non_outliers_df.index, columns=("MonetaryValue", "Frequency", "Recency"))
+scaled_data_df
+```
+
+#### KMeans Clustering
