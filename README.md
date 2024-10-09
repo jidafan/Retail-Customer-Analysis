@@ -18,5 +18,14 @@ Before we begin working on the dataset, we must understand the data. In this ste
 
 ![image](https://github.com/user-attachments/assets/f49d6abc-1558-4eba-a718-69f31a56cbd1)
 
-After taking a look at the data, we then explore the columns and search for invalid entries and missing data.
+After taking a look at the data. Next is exploring the columns and searching for invalid entries and missing data.
+
+From looking at the UCI website, we know that there are guidelines that the variables must follow to be a valid entry.
+
+| Variable      | Guideline        | 
+| ------------- |:---------------------| 
+| `InvoiceNo`     | 6 digit number, can contain C at the end which indiciates a cancellation   |
+| `StockCode`     | 5 digit number  |   
+| `UnitPrice` | price > 0                       |
+| `CustomerID`     | 5 digit identifier for customers  |
 
