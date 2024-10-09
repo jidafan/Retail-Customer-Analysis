@@ -26,6 +26,34 @@ From looking at the UCI website, we know that there are guidelines that the vari
 | ------------- |:---------------------| 
 | `InvoiceNo`     | 6 digit number, can contain C at the end which indiciates a cancellation   |
 | `StockCode`     | 5 digit number  |   
-| `UnitPrice` | price > 0                       |
+| `UnitPrice` | Price > 0                       |
 | `CustomerID`     | 5 digit identifier for customers  |
+| `Quantity` | Quantity > 0                       |
+
+From analyzing the columns, we see that there a lot of entries that do meet the requirements and should not be included in the analysis.
+
+However, in the StockCode column we find that there are many unique codes that do not follow the guidelines, so we must analyze each code and determine whether or not they should be included.
+
+![image](https://github.com/user-attachments/assets/f3d5778f-bf44-4451-b9d7-9adaa2559501)
+
+Following the investigation we find that,
+
+* Stock codes follow a specific format of 5 digits from [0-9], however some do have a letter from [a-z] after the digits. The cases listed below are special cases
+
+| Variable      | Description           |  Action |
+| ------------- |-----------------| :----------------- |
+| `DCGS`     | Looks valid, however some quantities are negative and missing customer ID | Exclude from clustering |
+| `D`     | Looks valid and it represents discount values  | Exclude from clustering |
+| `DOT`     | Looks valid and represents the charges from postage | Exclude from clustering |
+| `M or m`     | Looks valid represents manual transactions | Exclude from clustering |
+| `C2`     | Carriage transaction | Exclude from clustering |
+| `C3`     | Only one value | Exclude |
+| `Bank Charges or B`     | Bank charges | Exclude from clustering |
+| `S`     | Samples sent to customers | Exclude from clustering |
+| `TESTXXX`     | Testing data | Exclude from clustering |
+| `gift_XXX`     | Purchases from Gift Card, does not hold customer data | Exclude |
+| `PADS`     | Stock Code for padding, unique case | Include |
+| `SP1002`     | 3 transactions for a special item, however, 1 has no pricing | Exclude |
+| `AMAZONFEE`     | Amazon shipping fee | Exclude |
+| `ADJUSTX`     | Manual adjustments by Admin | Exclude |
 
