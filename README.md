@@ -1,18 +1,24 @@
 # Retail Customer Analysis
 
-## Table of Contents
-* [Introduction](#introduction)
-* [Code](#code)
+- [1. Introduction](#1-introduction)
+- [2. Code](#2-code)
+  * [2.1 Exploratory Data Analysis](#21-exploratory-data-analysis)
+  * [2.2 Data Cleaning](#22-data-cleaning)
+  * [2.3 Feature Engineering](#23-feature-engineering)
+  * [2.4 KMeans Clustering](#24-kmeans-clustering)
+    + [1.4.1 Internal References](#141-internal-references)
+    + [1.4.2 External References](#142-external-references)
+  * [1.5 Overview](#15-overview)
 
-### Introduction
+### 1. Introduction
 
 The project shown is the customer analysis of shoppers from an online retail transaction data set of two years. The program uses KMeans Clustering to group customers and determine strategies for retaining and engaging customers. The data is from a UCI dataset that can be viewed [here](https://archive.ics.uci.edu/dataset/502/online+retail+ii).
 
-### Code
+### 2. Code
 
 The code for the project can be viewed [here](https://github.com/jidafan/Retail-Customer-Analysis/blob/main/Customers.ipynb)
 
-#### Exploratory Data Analysis
+#### 2.1 Exploratory Data Analysis
 
 Before we begin working on the dataset, we must understand the data. In this step of the code, we create a data frame using Pandas to hold all the information from the Excel file. 
 
@@ -59,7 +65,7 @@ Following the investigation we find that,
 
 We find that only the unique case of 'PADS' is a valid code to include in our analysis.
 
-#### Data Cleaning
+#### 2.2 Data Cleaning
 
 The first step of our data cleaning process is to only include valid invoices, which are 6 digit numbers. To do this we create a mask function which will only capture valid InvoiceNos.
 
@@ -73,7 +79,7 @@ After, this we remove any customer IDS that are null and any prices that are <= 
 
 Following this processes, we find that after cleaning the dataset. We have retained 77% of the data, losing 23% of the data in the process.
 
-#### Feature Engineering
+#### 2.3 Feature Engineering
 
 The first step in this process is creating a new Dataframe with only information that we need for our cluster analysis.
 
@@ -150,4 +156,4 @@ scaled_data_df = pd.DataFrame(scaled_data, index=non_outliers_df.index, columns=
 scaled_data_df
 ```
 
-#### KMeans Clustering
+#### 2.4 KMeans Clustering
